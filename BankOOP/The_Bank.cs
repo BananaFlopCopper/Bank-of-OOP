@@ -11,7 +11,7 @@ namespace BankOOP
         private string username;
         private string password;
         private decimal balance;
-        The_Bank(string _name, string user, string pass_safe, decimal initialBal)
+        public The_Bank(string _name, string user, string pass_safe, decimal initialBal)
         {
             name = _name;
             username = user;
@@ -24,15 +24,11 @@ namespace BankOOP
             {
                 return name;
             }
-            else return "";
+            else return null;
         }
         public string getUsername()
         {
-            if (loggedIn == true)
-            {
                 return username;
-            }
-            else return "";
         }
         public decimal getBalance()
         {
@@ -45,7 +41,7 @@ namespace BankOOP
         }
         public bool verifylogin(string inputUsername, string inputPassword)
         {
-            if (inputUsername == username)
+            if (inputUsername == username.ToLower())
             {
                 if (inputPassword == password)
                 {
