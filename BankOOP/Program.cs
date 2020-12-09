@@ -3,23 +3,27 @@ using System.Collections.Generic;
 
 namespace BankOOP
 {
+    enum CheckorSave
+    {
+        Check,
+        Save
+    }
     class Program
     {
         static void Main(string[] args)
         {
             bool running = true;
-
-            while (running == true)
+            The_Bank Elmer = new The_Bank("Elmer Fudd", "efudd", "efudd1", 345.00m);
+            The_Bank Bugs = new The_Bank("Bugs Bunny", "bbunny", "bbunny1", 1722.12m);
+            The_Bank Tweety = new The_Bank("Tweety Bird", "tbird", "tbird1", 45.44m);
+            while (running)
             {
-                The_Bank Elmer = new The_Bank("Elmer Fudd", "efudd", "efudd1", 345.00m);
-                The_Bank Bugs = new The_Bank("Bugs Bunny", "bbunny", "bbunny1", 1722.12m);
-                The_Bank Tweety = new The_Bank("Tweety Bird", "tbird", "tbird1", 45.44m);
                 List < The_Bank > users = new List<The_Bank>();
                 List<string> usernames = new List<string>();
                 users.Add(Elmer);
                 users.Add(Bugs);
                 users.Add(Tweety);
-                int userstore;
+                int userstore = -1;
                 for (int i = 0; i < users.Count; i++)
                 {
                     usernames.Add(users[i].getUsername());
@@ -32,7 +36,7 @@ namespace BankOOP
                 {
                     Console.WriteLine("(L)ogin  (Q)uit");
                     init = Console.ReadLine();
-                    init.ToLower();
+                    init = init.ToLower();
                     if (!char.TryParse(init, out outit))
                     {
                         Console.WriteLine("Please enter a valid input (L, or Q).");
@@ -48,7 +52,7 @@ namespace BankOOP
                                 {
                                     Console.WriteLine("Please enter your username: ");
                                     username = Console.ReadLine();
-                                    username.ToLower();
+                                    username = username.ToLower();
                                     if (usernames.Contains(username))
                                     {
                                         Console.WriteLine("Please enter your password:");
@@ -72,7 +76,7 @@ namespace BankOOP
                                 break;
                             case 'q':   //Quit
                                 running = false;
-                                break;
+                                return;
                             default:
                                 Console.WriteLine("Please enter a valid input (L, or Q).");
                                 break;
@@ -82,9 +86,11 @@ namespace BankOOP
 
                 while (loggedin)
                 {
+                    Console.WriteLine("Welcome " + users[userstore].getUsername() + "\t Current Total Balance: $" 
+                        + ( users[userstore].getCheckings()+ users[userstore].getSavings() ));
                     Console.WriteLine("(W)ithdraw   (D)eposit   (B)alance   (L)ogout");
                     init = Console.ReadLine();
-                    init.ToLower();
+                    init = init.ToLower();
                     if (!char.TryParse(init, out outit))
                     {
                         Console.WriteLine("Please enter a valid input (W, D, B, or L).");
@@ -93,20 +99,119 @@ namespace BankOOP
                     {
                         switch (outit)
                         {
-                            case 'w': //Withdraw
+                            case 'w':   //Withdraw
+                                Console.WriteLine("(C)heckings, or (S)avings?");
+                                init = Console.ReadLine();
+                                init = init.ToLower();
+                                if (!char.TryParse(init, out outit))
+                                {
+                                    Console.WriteLine("Please enter a valid input (C, or S).");
+                                }
+                                //the actually important code here
+                                string input;
+                                decimal parsedinput;
+                                switch (outit)
+                                {
+                                    case 'c':
+                                        Console.WriteLine("How much would you like to Withdraw from Checkings?");
+                                        input = Console.ReadLine();
+                                        if (!decimal.TryParse(input, out parsedinput))
+                                        {
+                                            if (input.Contains('$'))
+                                            {
+                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
+                                            }
+                                            else { Console.WriteLine("Please enter a value."); }
+                                        }
+                                        users[userstore].withdraw(parsedinput, CheckorSave.Check);
+                                        break;
+                                    case 's':
 
+                                        Console.WriteLine("How much would you like to Withdraw from Savings?");
+                                        input = Console.ReadLine();
+                                        if (!decimal.TryParse(input, out parsedinput))
+                                        {
+                                            if (input.Contains('$'))
+                                            {
+                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
+                                            }
+                                            else { Console.WriteLine("Please enter a value."); }
+                                        }
+                                        users[userstore].withdraw(parsedinput, CheckorSave.Save);
+                                        break;
+                                }
+                                //
+                                Console.WriteLine("\nPress any Key to Continue.");
+                                Console.ReadKey();
+                                Console.Clear();
                                 break;
-                            case 'd': //Deposit
+                            case 'd':   //Deposit
+                                Console.WriteLine("(C)heckings, or (S)avings?");
+                                init = Console.ReadLine();
+                                init = init.ToLower();
+                                if (!char.TryParse(init, out outit))
+                                {
+                                    Console.WriteLine("Please enter a valid input (C, or S).");
+                                }
+                                //the actually important code here
+                                switch (outit)
+                                {
+                                    case 'c':
+                                        Console.WriteLine("How much would you like to deposit into Checkings?");
+                                         input = Console.ReadLine();
+                                        if (!decimal.TryParse(input, out parsedinput))
+                                        {
+                                            if (input.Contains('$'))
+                                            {
+                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
+                                            } else { Console.WriteLine("Please enter a value."); }
+                                        }
+                                        users[userstore].deposit(parsedinput,CheckorSave.Check);
+                                        break;
 
-                                break;
-                            case 'b': //Balance
+                                    case 's':
 
+                                        Console.WriteLine("How much would you like to deposit into Savings?");
+                                        input = Console.ReadLine();
+                                        if (!decimal.TryParse(input, out parsedinput))
+                                        {
+                                            if (input.Contains('$'))
+                                            {
+                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
+                                            }
+                                            else { Console.WriteLine("Please enter a value."); }
+
+                                        }
+                                        users[userstore].deposit(parsedinput, CheckorSave.Save);
+                                        break;
+                                }
+                                Console.WriteLine("\nPress any Key to Continue.");
+                                Console.ReadKey();
+                                Console.Clear();
                                 break;
-                            case 'l': //Logout
-                                      
-                                //more work required!
+
+                            case 'b':   //Balance
+                                Console.WriteLine("Checkings: \t" + users[userstore].getCheckings());
+                                Console.WriteLine("Savings: \t" + users[userstore].getSavings());
+                                
+                                
+                                Console.WriteLine("\nPress any Key to Continue.");
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+
+                            case 'l':   //Logout
+                                List<string> formatted = new List<string>(users[userstore].ToString(users[userstore].getHistory()));
+                                for(int i = 0; i<formatted.Count; i++)
+                                {
+                                    Console.WriteLine(formatted[i]);
+                                }
                                 loggedin = false;
+                                Console.WriteLine("\nPress any Key to Continue.");
+                                Console.ReadKey();
+                                Console.Clear();
                                 break;
+
                             default:
                                 Console.WriteLine("Enter a valid input (W, D, B, or L).");
                                 break;
