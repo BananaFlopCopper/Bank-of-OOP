@@ -42,10 +42,9 @@ namespace BankOOP
                     break;
             }
         }
-        public void withdraw(decimal _input, CheckorSave here)
+        public void withdraw(decimal input, CheckorSave here)
         {
-            decimal input = 0m;
-            input -= _input;
+            input = 0 - input;
             History.Add(input);
             switch (here)
             {

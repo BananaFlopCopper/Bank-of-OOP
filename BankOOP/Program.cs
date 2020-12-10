@@ -234,6 +234,7 @@ namespace BankOOP
             bool complete = false;
             while (!complete) {
                 input = Console.ReadLine();
+
                 if (!decimal.TryParse(input, out parsedinput))
                 {
                     if (input.Contains('$'))
@@ -242,6 +243,10 @@ namespace BankOOP
                     }
                     else { Console.WriteLine("Please enter a value."); }
 
+                }
+                else if (input.Contains('-'))
+                {
+                    Console.WriteLine("Cannot be negative");
                 }
                 else
                 {
