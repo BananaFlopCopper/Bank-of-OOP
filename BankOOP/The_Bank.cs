@@ -116,7 +116,7 @@ namespace BankOOP
                     decimal numberFix = help[i] - 2 * help[i];
                     formatted.Add("Withdrawl: \t" + "$" + numberFix);
                 }
-                else { formatted.Add("Deposit \t" + "$" + help[i]); }
+                else { formatted.Add("Deposit: \t" + "$" + help[i]); }
             }
             History.Clear();
             return formatted;
