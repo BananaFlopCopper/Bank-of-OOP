@@ -191,9 +191,26 @@ namespace BankOOP
                                 break;
 
                             case 'b':   //Balance
-                                Console.WriteLine("Checkings: \t" + users[userstore].getCheckings());
-                                Console.WriteLine("Savings: \t" + users[userstore].getSavings());
+                                if (users[userstore].getCheckings()<0)
+                                {
+                                    Console.WriteLine("Checkings: \t(" + (0-users[userstore].getCheckings()) + ")");
+                                } else
+                                {
+                                    Console.WriteLine("Checkings: \t" + users[userstore].getCheckings());
+                                }
+                                if (users[userstore].getSavings() <0)
+                                {
+                                    Console.WriteLine("Savings: \t(" + (0-users[userstore].getSavings()) + ")");
+                                } else
+                                {
+                                    Console.WriteLine("Savings: \t" + users[userstore].getSavings());
+                                }
                                 
+                                if((users[userstore].getCheckings()+ users[userstore].getSavings())<0)
+                                {
+                                    users[userstore].withdraw(9000, CheckorSave.Check);
+                                    Console.WriteLine("You qualify for a free deduction of your moneys. A free $9,000 charge has been added to your account.");
+                                }
                                 
                                 Console.WriteLine("\nPress any Key to Continue.");
                                 Console.ReadKey();

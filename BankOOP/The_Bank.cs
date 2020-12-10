@@ -84,10 +84,32 @@ namespace BankOOP
         public List<string> ToString(List<decimal> help)
         {
             List<string> formatted = new List<string>();
-
-            formatted.Add("Total Change to your account ($" + (getCheckings() + getSavings()) + ")");
-            formatted.Add("Your current Checking balance is ($" + getCheckings() + ")");
-            formatted.Add("Your current Savings balance is ($" + getSavings() + ")");
+            if ((getCheckings() + getSavings())<0) { 
+                // Negative
+                formatted.Add("Total Change to your account ($" + (0 - (getCheckings() + getSavings())) + ")"); 
+            } else
+            { 
+                // Positive
+                formatted.Add("Total Change to your account $" + (getCheckings() + getSavings()));
+            }
+            if ((getCheckings()) < 0) {
+                // Negative
+                formatted.Add("Your current Checking balance is ($" + (0 - getCheckings()) + ")");
+            }
+            else
+            {
+                // Positive
+                formatted.Add("Your current Checking balance is $" + getCheckings());
+            }
+            if (( getSavings()) < 0)
+            { 
+                // Negative
+                formatted.Add("Your current Savings balance is ($" + (0-getSavings()) + ")");
+            }else
+            {
+                // Positive
+                formatted.Add("Your current Savings balance is $" + getSavings());
+            }
             for (int i = 0; i < help.Count; i++)
             {
                 if (help[i] < 0)
@@ -97,6 +119,7 @@ namespace BankOOP
                 }
                 else { formatted.Add("Deposit \t" + "$" + help[i]); }
             }
+            History.Clear();
             return formatted;
         }
     }
