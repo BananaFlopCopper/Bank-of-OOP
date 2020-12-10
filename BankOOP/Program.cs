@@ -23,7 +23,7 @@ namespace BankOOP
                 users.Add(Elmer);
                 users.Add(Bugs);
                 users.Add(Tweety);
-                int userstore = -1;
+                int user = -1;
                 for (int i = 0; i < users.Count; i++)
                 {
                     usernames.Add(users[i].getUsername());
@@ -63,8 +63,8 @@ namespace BankOOP
                                             {
 
                                                 loggedin = true;
-                                                userstore = i;
-                                                Console.WriteLine("Welcome " + users[userstore].getName() + ".\n" + "Press any key to continue.");
+                                                user = i;
+                                                Console.WriteLine("Welcome " + users[user].getName() + ".\n" + "Press any key to continue.");
                                                 Console.ReadKey();
                                                 Console.Clear();
 
@@ -86,14 +86,15 @@ namespace BankOOP
 
                 while (loggedin)
                 {
-                    Console.WriteLine("Welcome " + users[userstore].getUsername() + "\t Current Total Balance: $" 
-                        + ( users[userstore].getCheckings()+ users[userstore].getSavings() ));
+                    Console.WriteLine("Welcome " + users[user].getUsername() + "\t Current Total Balance: $" 
+                        + ( users[user].getCheckings()+ users[user].getSavings() ));
                     Console.WriteLine("(W)ithdraw   (D)eposit   (B)alance   (L)ogout");
                     init = Console.ReadLine();
                     init = init.ToLower();
                     if (!char.TryParse(init, out outit))
                     {
                         Console.WriteLine("Please enter a valid input (W, D, B, or L).");
+                        anyKey();
                     }
                     else
                     {
@@ -107,43 +108,37 @@ namespace BankOOP
                                 {
                                     Console.WriteLine("Please enter a valid input (C, or S).");
                                 }
-                                //the actually important code here
-                                string input;
-                                decimal parsedinput;
+
                                 switch (outit)
                                 {
-                                    case 'c':
+                                    case 'c':   //Checkings
                                         Console.WriteLine("How much would you like to Withdraw from Checkings?");
-                                        input = Console.ReadLine();
-                                        if (!decimal.TryParse(input, out parsedinput))
-                                        {
-                                            if (input.Contains('$'))
-                                            {
-                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
-                                            }
-                                            else { Console.WriteLine("Please enter a value."); }
+                                        if (users[user].getCheckings() < 0)
+                                        {   // Negative
+                                            Console.WriteLine("Current Checkings: \t($" + (0 - users[user].getCheckings()) + ")");
                                         }
-                                        users[userstore].withdraw(parsedinput, CheckorSave.Check);
+                                        else
+                                        {   // Positive
+                                            Console.WriteLine("Current Checkings: \t$" + users[user].getCheckings());
+                                        }
+                                        users[user].withdraw(tryParseNum(), CheckorSave.Check);
                                         break;
-                                    case 's':
 
+                                    case 's':   //Savings
                                         Console.WriteLine("How much would you like to Withdraw from Savings?");
-                                        input = Console.ReadLine();
-                                        if (!decimal.TryParse(input, out parsedinput))
-                                        {
-                                            if (input.Contains('$'))
-                                            {
-                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
-                                            }
-                                            else { Console.WriteLine("Please enter a value."); }
+                                        if (users[user].getSavings() < 0)
+                                        {   // Negative
+                                            Console.WriteLine("Current Savings: \t($" + (0 - users[user].getSavings()) + ")");
                                         }
-                                        users[userstore].withdraw(parsedinput, CheckorSave.Save);
+                                        else
+                                        {   // Positive
+                                            Console.WriteLine("Current Savings: \t$" + users[user].getSavings());
+                                        }
+                                        users[user].withdraw(tryParseNum(), CheckorSave.Save);
                                         break;
                                 }
                                 //
-                                Console.WriteLine("\nPress any Key to Continue.");
-                                Console.ReadKey();
-                                Console.Clear();
+                                anyKey();
                                 break;
                             case 'd':   //Deposit
                                 Console.WriteLine("(C)heckings, or (S)avings?");
@@ -153,90 +148,107 @@ namespace BankOOP
                                 {
                                     Console.WriteLine("Please enter a valid input (C, or S).");
                                 }
+
                                 //the actually important code here
                                 switch (outit)
                                 {
                                     case 'c':
                                         Console.WriteLine("How much would you like to deposit into Checkings?");
-                                         input = Console.ReadLine();
-                                        if (!decimal.TryParse(input, out parsedinput))
-                                        {
-                                            if (input.Contains('$'))
-                                            {
-                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
-                                            } else { Console.WriteLine("Please enter a value."); }
+                                        users[user].deposit(tryParseNum(), CheckorSave.Check);
+                                        if (users[user].getCheckings() < 0)
+                                        {   // Negative
+                                            Console.WriteLine("New Checkings Balance: \t($" + (0 - users[user].getCheckings()) + ")");
                                         }
-                                        users[userstore].deposit(parsedinput,CheckorSave.Check);
+                                        else
+                                        {   // Positive
+                                            Console.WriteLine("New Checkings Balance: \t$" + users[user].getCheckings());
+                                        }
                                         break;
 
                                     case 's':
 
                                         Console.WriteLine("How much would you like to deposit into Savings?");
-                                        input = Console.ReadLine();
-                                        if (!decimal.TryParse(input, out parsedinput))
-                                        {
-                                            if (input.Contains('$'))
-                                            {
-                                                Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
-                                            }
-                                            else { Console.WriteLine("Please enter a value."); }
-
+                                        users[user].deposit(tryParseNum(), CheckorSave.Save);
+                                        if (users[user].getSavings() < 0)
+                                        {   // Negative
+                                            Console.WriteLine("New Savings Balance: \t($" + (0 - users[user].getSavings()) + ")");
                                         }
-                                        users[userstore].deposit(parsedinput, CheckorSave.Save);
+                                        else
+                                        {   // Positive
+                                            Console.WriteLine("New Savings Balance: \t$" + users[user].getSavings());
+                                        }
                                         break;
                                 }
-                                Console.WriteLine("\nPress any Key to Continue.");
-                                Console.ReadKey();
-                                Console.Clear();
+                                anyKey();
                                 break;
 
                             case 'b':   //Balance
-                                if (users[userstore].getCheckings()<0)
-                                {
-                                    Console.WriteLine("Checkings: \t(" + (0-users[userstore].getCheckings()) + ")");
+                                if (users[user].getCheckings()<0) 
+                                {   // Negative
+                                    Console.WriteLine("Checkings: \t($" + (0-users[user].getCheckings()) + ")");
                                 } else
-                                {
-                                    Console.WriteLine("Checkings: \t" + users[userstore].getCheckings());
+                                {   // Positive
+                                    Console.WriteLine("Checkings: \t$" + users[user].getCheckings());
                                 }
-                                if (users[userstore].getSavings() <0)
-                                {
-                                    Console.WriteLine("Savings: \t(" + (0-users[userstore].getSavings()) + ")");
+                                if (users[user].getSavings() <0)
+                                {   // Negative
+                                    Console.WriteLine("Savings: \t($" + (0-users[user].getSavings()) + ")");
                                 } else
-                                {
-                                    Console.WriteLine("Savings: \t" + users[userstore].getSavings());
+                                {   // Positive
+                                    Console.WriteLine("Savings: \t$" + users[user].getSavings());
                                 }
-                                
-                                if((users[userstore].getCheckings()+ users[userstore].getSavings())<0)
-                                {
-                                    users[userstore].withdraw(9000, CheckorSave.Check);
-                                    Console.WriteLine("You qualify for a free deduction of your moneys. A free $9,000 charge has been added to your account.");
-                                }
-                                
-                                Console.WriteLine("\nPress any Key to Continue.");
-                                Console.ReadKey();
-                                Console.Clear();
+
+                                anyKey();
                                 break;
 
                             case 'l':   //Logout
-                                List<string> formatted = new List<string>(users[userstore].ToString(users[userstore].getHistory()));
+                                List<string> formatted = new List<string>(users[user].ToString(users[user].getHistory()));
                                 for(int i = 0; i<formatted.Count; i++)
                                 {
                                     Console.WriteLine(formatted[i]);
                                 }
                                 loggedin = false;
-                                Console.WriteLine("\nPress any Key to Continue.");
-                                Console.ReadKey();
-                                Console.Clear();
+                                anyKey();
                                 break;
 
                             default:
                                 Console.WriteLine("Enter a valid input (W, D, B, or L).");
+                                anyKey();
                                 break;
 
                         }
                     }
                 }
             }
+        }
+        public static void anyKey()
+        {
+            Console.WriteLine("\nPress any Key to Continue.");
+            Console.ReadKey();
+            Console.Clear();
+        }
+        public static decimal tryParseNum()
+        {
+            string input;
+            decimal parsedinput =0m;
+            bool complete = false;
+            while (!complete) {
+                input = Console.ReadLine();
+                if (!decimal.TryParse(input, out parsedinput))
+                {
+                    if (input.Contains('$'))
+                    {
+                        Console.WriteLine("Please enter a value. *do not enter the dollar sign*");
+                    }
+                    else { Console.WriteLine("Please enter a value."); }
+
+                }
+                else
+                {
+                    complete = true;
+                }
+            }
+            return parsedinput;
         }
     }
 }
